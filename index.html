@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>世界自然風光</title>
+<meta name="description" content="免費觀看世界各地的自然風景影片與即時直播。">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --surface: #ffffff;
+    --text: #1f2a24;
+    --muted: #5d6b63;
+    --accent: #2f7d5b;
+    --accent-soft: #e2f0e8;
+    --live: #c8372d;
+    --border: #e1e3dc;
+    --shadow: 0 6px 24px rgba(20, 40, 30, .12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121815;
+      --surface: #1b2420;
+      --text: #e8efe9;
+      --muted: #9aaba1;
+      --accent: #5cc392;
+      --accent-soft: #23362c;
+      --live: #ff6b5e;
+      --border: #2c3a33;
+      --shadow: 0 6px 24px rgba(0, 0, 0, .4);
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    padding: 14px 16px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+  }
+  h1 { font-size: 1.3rem; margin: 0; letter-spacing: .02em; }
+  .tagline { color: var(--muted); font-size: .9rem; margin: 0; flex: 1 1 200px; }
+  .random {
+    background: var(--accent); color: #fff; border: 0; border-radius: 999px;
+    padding: 8px 16px; font-size: .95rem; cursor: pointer; font-family: inherit;
+  }
+  .random:hover { filter: brightness(1.08); }
+  .chips {
+    display: flex; gap: 8px; padding: 0 16px 12px; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: none; border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    border-radius: 999px; padding: 6px 14px; font-size: .9rem; cursor: pointer; font-family: inherit;
+  }
+  .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  main { flex: 1; display: flex; min-height: 0; }
+  #map { flex: 1; min-height: 300px; }
+  .list {
+    width: 320px; overflow-y: auto; background: var(--surface); border-left: 1px solid var(--border);
+    padding: 8px; margin: 0; list-style: none;
+  }
+  .item {
+    display: flex; gap: 10px; align-items: center; padding: 8px; border-radius: 10px; cursor: pointer;
+  }
+  .item:hover, .item:focus-visible { background: var(--accent-soft); outline: none; }
+  .item img { width: 96px; height: 54px; object-fit: cover; border-radius: 6px; flex: none; background: var(--border); }
+  .item .name { font-weight: 600; font-size: .95rem; }
+  .item .meta { color: var(--muted); font-size: .8rem; margin-top: 2px; }
+  .badge-live {
+    display: inline-block; background: var(--live); color: #fff; font-size: .7rem; font-weight: 700;
+    border-radius: 4px; padding: 1px 5px; margin-left: 4px; vertical-align: 1px;
+  }
+  .pin {
+    width: 18px; height: 18px; border-radius: 50%; background: var(--accent);
+    border: 3px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.4);
+  }
+  .pin.live { background: var(--live); }
+  .leaflet-tooltip { font-family: inherit; }
+
+  .player {
+    position: fixed; inset: 0; background: rgba(0,0,0,.75); display: none;
+    align-items: center; justify-content: center; padding: 16px; z-index: 1000;
+  }
+  .player.open { display: flex; }
+  .player-box {
+    width: min(960px, 100%); background: var(--surface); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow);
+  }
+  .frame { position: relative; aspect-ratio: 16 / 9; background: #000; }
+  .frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .player-info { padding: 12px 16px; display: flex; gap: 12px; align-items: flex-start; }
+  .player-info h2 { font-size: 1.1rem; margin: 0 0 4px; }
+  .player-info p { margin: 0; color: var(--muted); font-size: .85rem; }
+  .player-info a { color: var(--accent); }
+  .close {
+    margin-left: auto; flex: none; background: transparent; border: 1px solid var(--border); color: var(--text);
+    border-radius: 999px; width: 36px; height: 36px; font-size: 1.1rem; cursor: pointer;
+  }
+  footer { color: var(--muted); font-size: .75rem; padding: 8px 16px; }
+
+  @media (max-width: 760px) {
+    main { flex-direction: column; }
+    #map { flex: none; height: 52vh; }
+    .list { width: 100%; border-left: 0; border-top: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🌏 世界自然風光</h1>
+  <p class="tagline">點地圖上的景點，免費欣賞世界各地的風景影片與即時直播。</p>
+  <button class="random" id="random">🎲 隨機看一個</button>
+</header>
+<nav class="chips" id="chips" aria-label="主題分類"></nav>
+<main>
+  <div id="map" aria-label="世界地圖"></div>
+  <ul class="list" id="list"></ul>
+</main>
+<footer>影片版權屬於各 YouTube 頻道作者，本站僅以官方嵌入方式播放。地圖 © OpenStreetMap 貢獻者。</footer>
+
+<div class="player" id="player" role="dialog" aria-modal="true" aria-labelledby="p-name">
+  <div class="player-box">
+    <div class="frame" id="frame"></div>
+    <div class="player-info">
+      <div>
+        <h2 id="p-name"></h2>
+        <p id="p-meta"></p>
+      </div>
+      <button class="close" id="close" aria-label="關閉">✕</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(async function () {
+  const videos = await fetch('videos.json').then(r => r.json());
+  const categories = ['全部', '台灣', '直播', ...new Set(videos.map(v => v.category))];
+  let current = '全部';
+
+  const map = L.map('map', { worldCopyJump: true, minZoom: 2 }).setView([20, 30], 2);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 10,
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  const markers = videos.map(v => {
+    const icon = L.divIcon({ className: '', html: `<div class="pin${v.live ? ' live' : ''}"></div>`, iconSize: [18, 18] });
+    const m = L.marker([v.lat, v.lng], { icon, title: v.name })
+      .bindTooltip(v.name + (v.live ? '（直播）' : ''))
+      .on('click', () => play(v));
+    return { v, m };
+  });
+
+  const chips = document.getElementById('chips');
+  categories.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'chip';
+    b.textContent = c;
+    b.setAttribute('aria-pressed', c === current);
+    b.onclick = () => { current = c; render(); };
+    chips.appendChild(b);
+  });
+
+  const matches = v => current === '全部'
+    || (current === '台灣' ? v.country === '台灣' : current === '直播' ? v.live : v.category === current);
+
+  function render() {
+    chips.querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', b.textContent === current));
+    const list = document.getElementById('list');
+    list.innerHTML = '';
+    markers.forEach(({ v, m }) => {
+      if (!matches(v)) { m.remove(); return; }
+      m.addTo(map);
+      const li = document.createElement('li');
+      li.className = 'item';
+      li.tabIndex = 0;
+      li.innerHTML = `<img loading="lazy" alt="" src="https://i.ytimg.com/vi/${v.id}/mqdefault.jpg">
+        <div><div class="name">${v.name}${v.live ? '<span class="badge-live">LIVE</span>' : ''}</div>
+        <div class="meta">${v.country} · ${v.category}</div></div>`;
+      li.onclick = () => { map.flyTo([v.lat, v.lng], 4); play(v); };
+      li.onkeydown = e => { if (e.key === 'Enter') li.onclick(); };
+      list.appendChild(li);
+    });
+  }
+
+  const player = document.getElementById('player');
+  function play(v) {
+    document.getElementById('frame').innerHTML =
+      `<iframe src="https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0" title="${v.name}"
+        allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+    document.getElementById('p-name').textContent = v.name + (v.live ? '（直播）' : '');
+    document.getElementById('p-meta').innerHTML =
+      `${v.country} · 影片來源：<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">${v.channel}</a>`;
+    player.classList.add('open');
+  }
+  function close() {
+    player.classList.remove('open');
+    document.getElementById('frame').innerHTML = '';
+  }
+  document.getElementById('close').onclick = close;
+  player.onclick = e => { if (e.target === player) close(); };
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+  document.getElementById('random').onclick = () => {
+    const pool = videos.filter(matches);
+    const v = pool[Math.floor(Math.random() * pool.length)];
+    map.flyTo([v.lat, v.lng], 4);
+    play(v);
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>
