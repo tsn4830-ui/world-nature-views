@@ -132,7 +132,7 @@
   <div id="globe" aria-label="可旋轉的 3D 地球儀"></div>
   <ul class="list" id="list"></ul>
 </main>
-<footer>影片版權屬於各 YouTube 頻道作者，本站僅以官方嵌入方式播放。地球影像：NASA Blue Marble。</footer>
+<footer>影片版權屬於各 YouTube 頻道作者，本站僅以官方嵌入方式播放。地球影像：NASA Blue Marble；衛星圖磚：<a href="https://s2maps.eu" target="_blank" rel="noopener">Sentinel-2 cloudless by EOX</a>（含 2020 年修改後的 Copernicus Sentinel 資料）。</footer>
 
 <div class="player" id="player" role="dialog" aria-modal="true" aria-labelledby="p-name">
   <div class="player-box">
@@ -147,17 +147,20 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/globe.gl@2.34.2/dist/globe.gl.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/globe.gl@2.46.2/dist/globe.gl.min.js"></script>
 <script>
 (async function () {
   const videos = await fetch('videos.json').then(r => r.json());
   const categories = ['全部', '台灣', '直播', ...new Set(videos.map(v => v.category))];
   let current = '全部';
 
+  const TILE_URL = 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg';
   const globeEl = document.getElementById('globe');
   const globe = Globe()(globeEl)
     .globeImageUrl('img/earth-blue-marble.jpg')
     .bumpImageUrl('img/earth-topology.png')
+    // 衛星影像圖磚：拉近時自動載入更高解析度
+    .globeTileEngineUrl((x, y, l) => TILE_URL.replace('{z}', l).replace('{x}', x).replace('{y}', y))
     .backgroundImageUrl('img/night-sky.png')
     .htmlElement(v => {
       const el = document.createElement('div');
@@ -178,7 +181,7 @@
 
   function focus(v) {
     controls.autoRotate = false;
-    globe.pointOfView({ lat: v.lat, lng: v.lng, altitude: v.country === '台灣' ? 0.6 : 1.6 }, 1200);
+    globe.pointOfView({ lat: v.lat, lng: v.lng, altitude: v.country === '台灣' ? 0.15 : 0.5 }, 1200);
   }
 
   const chips = document.getElementById('chips');
@@ -192,7 +195,7 @@
       render();
       if (c === '台灣') {
         controls.autoRotate = false;
-        globe.pointOfView({ lat: 23.7, lng: 121, altitude: 0.6 }, 1200);
+        globe.pointOfView({ lat: 23.7, lng: 121, altitude: 0.25 }, 1200);
       }
     };
     chips.appendChild(b);
