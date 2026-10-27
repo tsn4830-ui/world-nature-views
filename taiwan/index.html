@@ -1,0 +1,198 @@
+<title>台灣百景</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* Layout: a quiet masthead, category chips, then a two-to-three column grid of video cards; footer carries the owner's logo and the copyright notice */
+:root {
+  --bg: #f2f4f1;
+  --surface: #ffffff;
+  --fg: #1d2a28;
+  --muted: #5d6b68;
+  --line: #d7ddd9;
+  --nature: #2c6b62;
+  --culture: #b0442c;
+  --frame: #dfe5e1;
+  --mid: #9a6b12;
+  --display: "Noto Serif TC", "Songti TC", serif;
+  --body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131a19; --surface: #1b2423; --fg: #e6ece9; --muted: #9aa8a4;
+    --line: #2d3a38; --nature: #6fb8ab; --culture: #e3866e; --frame: #24302e; --mid: #d9a94a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131a19; --surface: #1b2423; --fg: #e6ece9; --muted: #9aa8a4;
+  --line: #2d3a38; --nature: #6fb8ab; --culture: #e3866e; --frame: #24302e; --mid: #d9a94a;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.7; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header .wrap { padding-block: 48px 24px; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; }
+h1 { font-family: var(--display); font-weight: 900; font-size: clamp(36px, 7vw, 60px); line-height: 1.1; margin: 0; letter-spacing: 0.04em; }
+.sub { margin: 8px 0 0; color: var(--muted); font-size: 16px; }
+.sub b { font-weight: 500; }
+.sub .n { color: var(--nature); } .sub .c { color: var(--culture); }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { font: inherit; font-size: 14px; padding: 6px 16px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--fg); cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.chip:focus-visible { outline: 2px solid var(--nature); outline-offset: 2px; }
+main .wrap { padding-block: 8px 56px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px 24px; }
+.card { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.video { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background: var(--frame); border-radius: 6px; overflow: hidden; display: grid; place-items: center; text-align: center; color: var(--muted); font-size: 13px; }
+.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video .ph { display: grid; gap: 4px; padding: 16px; }
+.video .ph strong { font-family: var(--display); font-size: 22px; color: var(--fg); font-weight: 600; }
+.meta { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.meta h2 { font-family: var(--display); font-size: 20px; font-weight: 600; margin: 0; }
+.tag { font-size: 12px; letter-spacing: 0.08em; color: var(--muted); }
+.tag i { font-style: normal; font-weight: 700; }
+.card[data-cat="自然風光"] .tag i { color: var(--nature); }
+.card[data-cat="人文色彩"] .tag i { color: var(--culture); }
+.levels { margin-bottom: 12px; }
+#regions { margin-bottom: 24px; }
+.empty { color: var(--muted); }
+.lv { font-size: 12px; font-weight: 700; padding: 1px 10px; border-radius: 999px; border: 1px solid currentColor; }
+.lv[data-l="入門"] { color: var(--nature); }
+.lv[data-l="中級"] { color: var(--mid); }
+.lv[data-l="進階"] { color: var(--culture); }
+.credit { margin: 0; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; }
+.credit a { color: var(--fg); }
+.blurb { margin: 0; }
+footer { border-top: 1px solid var(--line); }
+footer .wrap { padding-block: 32px 40px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+.logo { flex: none; max-width: 100%; }
+.logo img { display: block; width: 120px; height: auto; max-width: 100%; border-radius: 12px; }
+.notice { flex: 1 1 320px; min-width: 0; font-size: 13px; color: var(--muted); margin: 0; }
+.notice strong { color: var(--fg); font-weight: 500; }
+</style>
+
+<header>
+  <div class="wrap">
+    <div>
+      <h1>台灣百景</h1>
+      <p class="sub"><b class="n">自然風光</b>、<b class="c">人文色彩</b>，收集 YouTube 創作者鏡頭下的台灣</p>
+    </div>
+    <div class="chips" role="group" aria-label="分類">
+      <button class="chip" id="f-all" aria-pressed="true" data-f="">全部</button>
+      <button class="chip" id="f-n" aria-pressed="false" data-f="自然風光">自然風光</button>
+      <button class="chip" id="f-t" aria-pressed="false" data-f="trail">山林步道</button>
+      <button class="chip" id="f-c" aria-pressed="false" data-f="人文色彩">人文色彩</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="chips levels" id="levels" role="group" aria-label="難易度" hidden>
+      <button class="chip" id="l-all" aria-pressed="true" data-l="">全部難度</button>
+      <button class="chip" id="l-1" aria-pressed="false" data-l="入門">入門・親子</button>
+      <button class="chip" id="l-2" aria-pressed="false" data-l="中級">中級</button>
+      <button class="chip" id="l-3" aria-pressed="false" data-l="進階">進階・高山</button>
+    </div>
+    <div class="chips levels" id="regions" role="group" aria-label="地區" hidden>
+      <button class="chip" id="r-all" aria-pressed="true" data-r="">全部地區</button>
+      <button class="chip" id="r-n" aria-pressed="false" data-r="北部">北部</button>
+      <button class="chip" id="r-m" aria-pressed="false" data-r="中部">中部</button>
+      <button class="chip" id="r-s" aria-pressed="false" data-r="南部">南部</button>
+      <button class="chip" id="r-e" aria-pressed="false" data-r="東部">東部</button>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="logo" id="logo"><img src="logo.png" alt="曾士婷醫師"></div>
+    <p class="notice"><strong>本站由曾士婷醫師收集整理。</strong>所有影片皆以 YouTube 官方嵌入方式播放，影片之著作權與廣告收益均屬原創作者所有，本站不下載、不重製、不從中獲利。如創作者希望移除影片，請與我們聯繫。</p>
+  </div>
+</footer>
+
+<script>
+// EMBED: true on the public site (plays YouTube in place); false in preview, where only a link is shown.
+const EMBED = true;
+
+// Fill video and channel from the 素材清單 sheet.
+const SPOTS = [
+  { name: "太魯閣峽谷", county: "花蓮縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=8eWsEqPVPHY", channel: "Music Life Channel", channelUrl: "", blurb: "立霧溪切穿大理石岩層，峭壁直落數百公尺。" },
+  { name: "阿里山日出雲海", county: "嘉義縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=LrjDGN54yKg", channel: "靖天電視台 GoldenTV", channelUrl: "https://www.youtube.com/channel/UCNdrFiN0d3GSIiTxkLrgjXQ", blurb: "祝山觀日、森林小火車與千年神木。" },
+  { name: "日月潭", county: "南投縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=SgeOXmTPIgU", channel: "空中嚮島 The Formosa Guide", channelUrl: "https://www.youtube.com/channel/UCpEBW-QOxIHyLVx9uftc5MA", blurb: "台灣最大的天然淡水湖，邵族的家鄉。" },
+  { name: "清境合歡山", county: "南投縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=ZX8tu_Lrt0Q", channel: "Kimi0120", channelUrl: "https://www.youtube.com/channel/UC2jtyP3wnktGSxsGJjCBDlw", blurb: "武嶺海拔 3,275 公尺，公路可達的最高點。" },
+  { name: "墾丁", county: "屏東縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=x6Sr3VXTO8E", channel: "空中嚮島 The Formosa Guide", channelUrl: "https://www.youtube.com/channel/UCpEBW-QOxIHyLVx9uftc5MA", blurb: "珊瑚礁海岸與熱帶海灘，台灣的最南端。" },
+  { name: "玉山主峰步道", region: "中部", level: "進階", county: "南投縣・嘉義縣", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=ysDWIoApD7s", channel: "UM94 - Xing & Irene", channelUrl: "https://www.youtube.com/channel/UCqJkE1veH7eTm2Iy9f_V3hg", blurb: "從塔塔加出發、夜宿排雲山莊，清晨登上海拔 3,952 公尺的東北亞最高峰。" },
+  { name: "雪山主東峰步道", region: "中部", level: "進階", county: "台中市", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=IXnXfw4p1S4", channel: "ParksTaiwan", channelUrl: "https://www.youtube.com/channel/UCmHVEUvyGddIhcTHskn85AQ", blurb: "穿過黑森林、走上冰河遺跡雪山圈谷，登頂台灣第二高峰 3,886 公尺。" },
+  { name: "嘉明湖步道", region: "東部", level: "進階", county: "台東縣", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=a_nkGxbfZc0", channel: "荒野艾客 Wild Adventurer", channelUrl: "https://www.youtube.com/channel/UC_Q-waelnYuYUbLD98s-Nmg", blurb: "三天兩夜走過向陽山、三叉山，看見被稱為「天使的眼淚」的高山湖泊。" },
+  { name: "抹茶山（聖母登山步道）", region: "北部", level: "中級", county: "宜蘭縣", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=uukjhshW300", channel: "旅行貓頭鷹", channelUrl: "https://www.youtube.com/channel/UC1yfROTAWttesfDbpY58iWA", blurb: "礁溪的一日郊山，山頂草坡起伏像抹茶冰淇淋，可順登三角崙山。" },
+  { name: "錐麓古道", region: "東部", level: "中級", county: "花蓮縣", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=WzfhggRAi6g", channel: "亞洲旅遊台", channelUrl: "https://www.youtube.com/channel/UCO5IGCGYX23qMKeD9RkyG0g", blurb: "開鑿在太魯閣峭壁上的斷崖古道，腳下就是立霧溪峽谷，需事先申請入園。" },
+  { name: "草嶺古道", region: "北部", level: "入門", county: "新北市・宜蘭縣", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=kkLC5zSXXmw", channel: "TEV LEE's Slow Travel Life", channelUrl: "https://www.youtube.com/channel/UC0qhwH3LqrAbKgcEqPVAxWQ", blurb: "淡蘭古道北路的經典段，秋天芒花滿山，埡口可遠眺龜山島。" },
+  { name: "二子坪步道", region: "北部", level: "入門", county: "台北市", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=rGeNV0mvlwU", channel: "跟著領隊玩兼車宿", channelUrl: "https://www.youtube.com/channel/UC1ms-2JDh8fOFtQskkS7lZg", blurb: "陽明山的無障礙步道，路面平緩，推嬰兒車、輪椅都能走，終點有生態池。" },
+  { name: "象山步道", region: "北部", level: "入門", county: "台北市", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=AlINyj2ZnxE", channel: "Aiky一點GO瘋旅行", channelUrl: "https://www.youtube.com/channel/UCqDD7eYOdfFzVULKtJ4CZKA", blurb: "捷運就到的城市步道，爬上六巨石近看台北 101，傍晚來可看夕陽夜景。" },
+  { name: "見晴懷古步道", region: "北部", level: "入門", county: "宜蘭縣", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=hoctPzVEzTU", channel: "東南旅遊 Settour", channelUrl: "https://www.youtube.com/channel/UCK02Hb0hjpcCpqw3V6uirhw", blurb: "太平山上的舊運材軌道，穿過霧林與苔蘚，曾被 CNN 選為全球最美小徑之一。" },
+  { name: "合歡北峰步道", region: "中部", level: "中級", county: "南投縣・花蓮縣", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=L6by-5l0sOg", channel: "肥宅小律", channelUrl: "https://www.youtube.com/channel/UCAN7g0vK0I2NyvQe8FNm2iA", blurb: "從小風口上切，路程短但一路爬升，海拔 3,422 公尺的山頂展望群山。" },
+  { name: "鳶嘴山", region: "中部", level: "進階", county: "台中市", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=S3SoQJnykgI", channel: "逮丸女森 Michelle Chen", channelUrl: "https://www.youtube.com/channel/UCogZnszhYTs-zP5fDlsl0Sw", blurb: "大雪山林道旁的岩稜，需拉繩攀爬峭壁，景色刺激，懼高者請斟酌。" },
+  { name: "柴山（壽山）步道", region: "南部", level: "入門", county: "高雄市", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=hBWBuT5CSpM", channel: "葉生活 X EVEN日記", channelUrl: "https://www.youtube.com/channel/UCjZUx06l9Rmym3Y3AhXoDhQ", blurb: "高雄市區旁的珊瑚礁石灰岩山，林間常見台灣獼猴，小百岳之一。" },
+  { name: "北大武山", region: "南部", level: "進階", county: "屏東縣", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=vQzNkZgQv0s", channel: "Wake up Sonya", channelUrl: "https://www.youtube.com/channel/UCRtMuhv24eGKgDqeLxvhAjg", blurb: "排灣族與魯凱族的聖山，夜宿檜谷山莊，登頂 3,092 公尺看南台灣雲海。" },
+  { name: "九份老街", county: "新北市", cat: "人文色彩", video: "https://www.youtube.com/watch?v=iBgg8J5aDGU", channel: "Walking Expedition", channelUrl: "https://www.youtube.com/channel/UCmcOV3wooh5NfHHR5Szy0-A", blurb: "依山而建的金礦山城，夜裡亮起紅燈籠。" },
+  { name: "鹿港老街", county: "彰化縣", cat: "人文色彩", video: "https://www.youtube.com/watch?v=0ADYYdL8bTQ", channel: "Taiwan Wanderer 台灣亂流散步", channelUrl: "https://www.youtube.com/channel/UC9DjIldTTSLw_vAqG686rqQ", blurb: "「一府二鹿三艋舺」，清代繁華港口的街屋與廟宇。" },
+  { name: "台南孔廟與府城古蹟", county: "台南市", cat: "人文色彩", video: "https://www.youtube.com/watch?v=hQ4ie7yp1tY", channel: "Jasper | 漫步", channelUrl: "https://www.youtube.com/channel/UCZ3dBvGfn6BRSPAMnd9-xow", blurb: "全台首學，府城四百年的歷史起點。" },
+  { name: "大甲媽祖遶境", county: "台中市", cat: "人文色彩", video: "https://www.youtube.com/watch?v=Q4rkw2B0jeI", channel: "先楓行腳", channelUrl: "https://www.youtube.com/channel/UCuN7DbHm4f9rACBK9ze9DxQ", blurb: "九天八夜、數十萬信眾隨行的宗教盛事。" },
+  { name: "蘭嶼達悟族", county: "台東縣", cat: "人文色彩", video: "https://www.youtube.com/watch?v=a41WxnqUujo", channel: "1000步要去哪裡", channelUrl: "https://www.youtube.com/channel/UC2x5k8GlQg5DA2LsgUYylEg", blurb: "拼板舟、飛魚季與地下屋的海洋文化。" }
+];
+
+function videoId(url) {
+  const m = String(url).match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/);
+  return m ? m[1] : "";
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+function card(s) {
+  const id = videoId(s.video);
+  let frame;
+  if (id && EMBED) {
+    frame = `<iframe src="https://www.youtube-nocookie.com/embed/${id}" title="${esc(s.name)}" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  } else if (id) {
+    frame = `<div class="ph"><strong>${esc(s.name)}</strong><a href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">在 YouTube 觀看</a></div>`;
+  } else {
+    frame = `<div class="ph"><strong>${esc(s.name)}</strong><span>影片待補</span></div>`;
+  }
+  const ch = s.channel
+    ? (s.channelUrl ? `<a href="${esc(s.channelUrl)}" target="_blank" rel="noopener">${esc(s.channel)}</a>` : esc(s.channel))
+    : "（頻道名稱待補）";
+  return `<article class="card" data-cat="${s.cat}">
+    <div class="video">${frame}</div>
+    <div class="meta"><h2>${esc(s.name)}</h2><span class="tag"><i>${s.trail ? "山林步道" : s.cat}</i>　${s.region ? s.region + "・" : ""}${esc(s.county)}</span>${s.level ? `<span class="lv" data-l="${s.level}">${s.level}</span>` : ""}</div>
+    <p class="blurb">${esc(s.blurb)}</p>
+    <p class="credit">影片：${ch}　著作權與收益歸原作者所有</p>
+  </article>`;
+}
+
+const grid = document.getElementById("grid");
+const levels = document.getElementById("levels");
+const ORDER = { "入門": 1, "中級": 2, "進階": 3 };
+const regions = document.getElementById("regions");
+let cat = "", lvl = "", reg = "";
+function render() {
+  let list = SPOTS.filter(s => !cat || (cat === "trail" ? s.trail : s.cat === cat));
+  if (cat === "trail") {
+    list = list.filter(s => (!lvl || s.level === lvl) && (!reg || s.region === reg)).sort((a, b) => ORDER[a.level] - ORDER[b.level]);
+  }
+  levels.hidden = regions.hidden = cat !== "trail";
+  grid.innerHTML = list.length ? list.map(card).join("") : `<p class="empty">這個地區目前沒有這個難度的步道。</p>`;
+}
+function press(group, btn) {
+  group.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === btn ? "true" : "false"));
+}
+document.querySelectorAll("header .chip").forEach(b => b.addEventListener("click", () => {
+  press(b.parentElement, b); cat = b.dataset.f; render();
+}));
+levels.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => {
+  press(levels, b); lvl = b.dataset.l; render();
+}));
+regions.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => {
+  press(regions, b); reg = b.dataset.r; render();
+}));
+render();
+</script>
