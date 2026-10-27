@@ -11,7 +11,7 @@
   "channel": "Filippo Rivetti"
  },
  {
-  "id": "PzED1SBlLAQ",
+  "id": "XAbwlbt6qB8",
   "name": "冰島夜空即時極光",
   "country": "冰島",
   "lat": 65.68,
@@ -19,7 +19,8 @@
   "category": "極光",
   "live": true,
   "title": "LIVE Iceland NOW | 4K Aurora Borealis Real-Time Sky Camera",
-  "channel": "Geimfarinn"
+  "channel": "Geimfarinn",
+  "liveChannel": "UC8XYuAeP8-tigZF88tUcocg"
  },
  {
   "id": "nL3vfS2EzxA",
@@ -220,37 +221,37 @@
   "channel": "NamibiaCam"
  },
  {
-  "id": "2swy9gysvOY",
-  "name": "非洲河畔野生動物即時影像",
-  "country": "非洲",
-  "lat": -24.0,
-  "lng": 31.5,
+  "id": "-7GOA9KIWcs",
+  "name": "肯亞馬賽馬拉・動物大遷徙渡河點即時影像",
+  "country": "肯亞",
+  "lat": -1.5,
+  "lng": 35.1,
   "category": "野生動物",
   "live": true,
-  "title": "African River Wildlife Camera powered by Explore.org",
-  "channel": "Explore.org"
+  "title": "LIVE Main Crossing: Masai Mara Great Migration River Crossing - Africam",
+  "channel": "Explore Africa"
  },
  {
-  "id": "05SCfxNLqns",
-  "name": "福壽山農場・天池即時影像",
+  "id": "3BuHUbSD-L0",
+  "name": "福壽山農場・千櫻園與天池",
   "country": "台灣",
   "lat": 24.24,
   "lng": 121.26,
   "category": "山",
-  "live": true,
-  "title": "福壽山農場即時影像【天池-海拔2614m】",
-  "channel": "福壽山農場"
+  "live": false,
+  "title": "福壽山農場「千櫻園、百櫻園」及「天池」4K",
+  "channel": "Taiwan Jimyen Travel"
  },
  {
-  "id": "nMTbcG77nxc",
-  "name": "福壽山農場・百櫻園看雪山",
+  "id": "-fqwmARswd0",
+  "name": "福壽山農場空拍",
   "country": "台灣",
   "lat": 24.25,
   "lng": 121.23,
   "category": "山",
-  "live": true,
-  "title": "福壽山農場即時影像【百櫻園 賞櫻看雪山-海拔2200m】",
-  "channel": "福壽山農場"
+  "live": false,
+  "title": "福壽山農場/千櫻園/空拍/2025/02/24",
+  "channel": "福壽山農場 Fushoushan Farm"
  },
  {
   "id": "pucydJQT_oM",
@@ -276,12 +277,12 @@
  },
  {
   "id": "ZVLNFxiiFEI",
-  "name": "合歡山小風口即時影像",
+  "name": "合歡山小風口",
   "country": "台灣",
   "lat": 24.15,
   "lng": 121.29,
   "category": "山",
-  "live": true,
+  "live": false,
   "title": "合歡山小風口-即時影像",
   "channel": "MiloChen65"
  },
@@ -298,12 +299,12 @@
  },
  {
   "id": "lCkzYJ0tte0",
-  "name": "日月潭即時影像",
+  "name": "日月潭（雲品酒店視角）",
   "country": "台灣",
   "lat": 23.86,
   "lng": 120.91,
   "category": "湖泊",
-  "live": true,
+  "live": false,
   "title": "雲品溫泉酒店 日月潭即時影像",
   "channel": "雲品溫泉酒店"
  },

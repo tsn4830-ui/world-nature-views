@@ -226,11 +226,14 @@
   const player = document.getElementById('player');
   function play(v) {
     document.getElementById('frame').innerHTML =
-      `<iframe src="https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0" title="${v.name}"
+      `<iframe src="${v.liveChannel
+          // 這類頻道會定期重開直播，用頻道網址永遠播放目前的那一場
+          ? `https://www.youtube.com/embed/live_stream?channel=${v.liveChannel}&autoplay=1`
+          : `https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0`}" title="${v.name}"
         allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
     document.getElementById('p-name').textContent = v.name + (v.live ? '（直播）' : '');
     document.getElementById('p-meta').innerHTML =
-      `${v.country} · 影片來源：<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">${v.channel}</a>`;
+      `${v.country} · 影片來源：<a href="${v.liveChannel ? `https://www.youtube.com/channel/${v.liveChannel}/live` : `https://www.youtube.com/watch?v=${v.id}`}" target="_blank" rel="noopener">${v.channel}</a>`;
     player.classList.add('open');
   }
   function close() {
