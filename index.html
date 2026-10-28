@@ -108,6 +108,7 @@
   .player-info h2 { font-size: 1.1rem; margin: 0 0 4px; }
   .player-info p { margin: 0; color: var(--muted); font-size: .85rem; }
   .player-info a { color: var(--accent); }
+  .player-info a.earth { font-weight: 600; white-space: nowrap; }
   .close {
     margin-left: auto; flex: none; background: transparent; border: 1px solid var(--border); color: var(--text);
     border-radius: 999px; width: 36px; height: 36px; font-size: 1.1rem; cursor: pointer;
@@ -233,7 +234,8 @@
         allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
     document.getElementById('p-name').textContent = v.name + (v.live ? '（直播）' : '');
     document.getElementById('p-meta').innerHTML =
-      `${v.country} · 影片來源：<a href="${v.liveChannel ? `https://www.youtube.com/channel/${v.liveChannel}/live` : `https://www.youtube.com/watch?v=${v.id}`}" target="_blank" rel="noopener">${v.channel}</a>`;
+      `${v.country} · 影片來源：<a href="${v.liveChannel ? `https://www.youtube.com/channel/${v.liveChannel}/live` : `https://www.youtube.com/watch?v=${v.id}`}" target="_blank" rel="noopener">${v.channel}</a>
+      · <a class="earth" href="https://earth.google.com/web/@${v.lat},${v.lng},1500a,30000d,35y,0h,60t,0r" target="_blank" rel="noopener">🌍 在 Google Earth 看這裡</a>`;
     player.classList.add('open');
   }
   function close() {
