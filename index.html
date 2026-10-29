@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>世界自然風光</title>
 <meta name="description" content="免費觀看世界各地的自然風景影片與即時直播。">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <style>
   :root {
     --bg: #f6f5f1;
@@ -46,7 +48,8 @@
     align-items: center;
     gap: 10px 16px;
   }
-  h1 { font-size: 1.3rem; margin: 0; letter-spacing: .02em; }
+  h1 { font-size: 1.3rem; margin: 0; letter-spacing: .02em; display: flex; align-items: center; gap: 10px; }
+  .logo { width: 56px; height: 56px; border-radius: 12px; object-fit: contain; flex: none; display: block; }
   .tagline { color: var(--muted); font-size: .9rem; margin: 0; flex: 1 1 200px; }
   .random {
     background: var(--accent); color: #fff; border: 0; border-radius: 999px;
@@ -124,7 +127,7 @@
 </head>
 <body>
 <header>
-  <h1>🌏 世界自然風光</h1>
+  <h1><img class="logo" src="img/logo.webp" alt="Dr. 曾" width="56" height="56">世界自然風光</h1>
   <p class="tagline">轉動地球、點上面的亮點，免費欣賞世界各地的風景影片與即時直播。</p>
   <button class="random" id="random">🎲 隨機看一個</button>
 </header>
